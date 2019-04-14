@@ -1,4 +1,4 @@
-const {	app, BrowserWindow, Menu } = require('electron');
+const {	app, BrowserWindow, Menu, ipcMain } = require('electron');
 const url = require('url');
 const path = require('path');
 
@@ -38,7 +38,7 @@ function createNewProductWindow() {
 		title: 'Add A New Product'
 	});
 
-	newProductWindow.setMenu(null);
+	//newProductWindow.setMenu(null);
 	newProductWindow.loadURL(url.format({
 		//Cargar el archivo principal
 		pathname: path.join(__dirname, 'views/new-product.html'),
@@ -50,6 +50,13 @@ function createNewProductWindow() {
 		newProductWindow = null;
 	});
 }
+
+ipcMain.on('product:new', (e, newProduct) => {
+	mainWindow.webContents.send('product:new', newProduct);
+	newProductWindow.close();
+});
+
+
 
 const templateMenu = [
 	{
@@ -65,7 +72,7 @@ const templateMenu = [
 			{
 				label: 'Remove All Products',
 				click() {
-
+					mainWindow.webContents.send('products:remove-all');
 				}
 			},
 			{
@@ -91,6 +98,7 @@ if (process.env.NODE_ENV !== 'production') {
 		submenu: [
 			{
 				label: 'Show/Hide Dev Tools',
+				accelerator: 'Ctrl+D',
 				click(item, focusetWindow) {
 					focusetWindow.toggleDevTools();
 				}
