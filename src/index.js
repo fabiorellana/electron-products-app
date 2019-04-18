@@ -38,7 +38,7 @@ function createNewProductWindow() {
 		title: 'Add A New Product'
 	});
 
-	//newProductWindow.setMenu(null);
+	newProductWindow.setMenu(null);
 	newProductWindow.loadURL(url.format({
 		//Cargar el archivo principal
 		pathname: path.join(__dirname, 'views/new-product.html'),
