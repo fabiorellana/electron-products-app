@@ -58,8 +58,8 @@ ipcMain.on('product:new', (e, newProduct) => {
 
 function aboutProductWindow() {
 	newAboutProductWindow = new BrowserWindow({
-		width: 400,
-		height: 330,
+		width: 430,
+		height: 400,
 		transparent: true,
 		title: 'Acerca de'
 	});
