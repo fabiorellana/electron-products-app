@@ -35,7 +35,7 @@ function createNewProductWindow() {
 	newProductWindow = new BrowserWindow({
 		width: 400,
 		height: 330,
-		title: 'Add A New Product'
+		title: 'Agregar nuevo producto'
 	});
 
 	newProductWindow.setMenu(null);
@@ -56,27 +56,47 @@ ipcMain.on('product:new', (e, newProduct) => {
 	newProductWindow.close();
 });
 
+function aboutProductWindow() {
+	newAboutProductWindow = new BrowserWindow({
+		width: 400,
+		height: 330,
+		transparent: true,
+		title: 'Acerca de'
+	});
+
+	newAboutProductWindow.setMenu(null);
+	newAboutProductWindow.loadURL(url.format({
+		pathname: path.join(__dirname, 'views/about.html'),
+		protocol: 'file',
+		slashes: true
+	}))
+
+	newAboutProductWindow.on('closed', () => {
+		newAboutProductWindow = null;
+	});
+}
+
 
 
 const templateMenu = [
 	{
-		label: 'File',
+		label: 'Archivo',
 		submenu: [
 			{
-				label: 'New Product',
+				label: 'Nuevo Producto',
 				accelerator: 'Ctrl+N',
 				click() {
 					createNewProductWindow();
 				}
 			},
 			{
-				label: 'Remove All Products',
+				label: 'Remover Productos',
 				click() {
 					mainWindow.webContents.send('products:remove-all');
 				}
 			},
 			{
-				label: 'Exit',
+				label: 'Salir',
 				accelerator: process.platform == 'darwin' ? 'command+Q' : 'Ctrl+Q',
 				click() {
 					app.quit();
@@ -105,6 +125,24 @@ if (process.env.NODE_ENV !== 'production') {
 			},
 			{
 				role: 'reload'
+			}
+		]
+	},
+	{
+		label: 'Ayuda',
+		submenu: [
+			{
+				label: 'Leer Mas',
+				click() {
+					require('electron').shell.openExternal('https://electronjs.org');
+				}
+			},
+			{
+				label: 'Acerca de',
+				accelerator: 'Ctrl+F',
+				click() {
+					aboutProductWindow();
+				}
 			}
 		]
 	})
